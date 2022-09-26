@@ -1,4 +1,3 @@
-using Grpc.Net.ClientFactory;
 using Ingredients.Protos;
 
 namespace Ingredients.Tests;
@@ -17,7 +16,7 @@ public class ToppingsTests: IClassFixture<IngredientsApplicationFactory>
     public async Task GetsToppings()
     {
         var client = _factory.CreateGrpcClient();
-        var response = await client.GetToppingsAsync((new GetToppingsRequest()));
+        var response = await client.GetToppingsAsync(new GetToppingsRequest());
         
         Assert.Collection(response.Toppings, t => 
             Assert.Equal("cheese", t.Id), t => Assert.Equal("tomato", t.Id));

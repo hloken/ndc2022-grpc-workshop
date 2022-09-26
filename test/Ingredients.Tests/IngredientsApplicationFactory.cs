@@ -29,6 +29,7 @@ public class IngredientsApplicationFactory : WebApplicationFactory<IngredientsIm
         builder.ConfigureServices(s =>
         {
             SubToppingData(s);
+            SubCrustData(s);
         });
         
         base.ConfigureWebHost(builder);
@@ -45,6 +46,23 @@ public class IngredientsApplicationFactory : WebApplicationFactory<IngredientsIm
         };
 
         var sub = Substitute.For<IToppingData>();
+        sub.GetAsync(Arg.Any<CancellationToken>())
+            .Returns(list);
+
+        services.AddSingleton(sub);
+    }
+
+    private static void SubCrustData(IServiceCollection services)
+    {
+        services.RemoveAll<ICrustData>();
+
+        var list = new List<CrustEntity>
+        {
+            new("deepdish", "Deep Dish", 2, 30d, 15),
+            new("italian", "Italien Style", 1, 10d, 10)
+        };
+
+        var sub = Substitute.For<ICrustData>();
         sub.GetAsync(Arg.Any<CancellationToken>())
             .Returns(list);
 

@@ -19,12 +19,8 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         var toppings = await GetToppingsAsync();
+        var crusts = await GetCrustsAsync();
         
-        var crusts = new List<CrustViewModel>
-        {
-            new("thin9", "Thin", 9, 5m),
-            new("deep9", "Deep", 9, 6m),
-        };
         var viewModel = new HomeViewModel(toppings, crusts);
         return View(viewModel);
     }
@@ -35,6 +31,15 @@ public class HomeController : Controller
 
         return response.Toppings
             .Select(t => new ToppingViewModel(t.Id, t.Name, t.Price))
+            .ToList();
+    }
+    
+    private async Task<List<CrustViewModel>> GetCrustsAsync()
+    {
+        var response = await _ingredientsServiceClient.GetCrustsAsync(new GetCrustsRequest());
+
+        return response.Crusts
+            .Select(t => new CrustViewModel(t.Id, t.Name, t.Size, t.Price))
             .ToList();
     }
     
