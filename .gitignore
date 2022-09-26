@@ -354,3 +354,4 @@ MigrationBackup/
 
 # Jetbrains Rider
 .idea/
+**/appsettings.Development.json
