@@ -1,0 +1,19 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: pizza
+services:
+- name: frontend
+  project: src/Frontend/Frontend.csproj
+  bindings:
+    - name: http
+      port: 5001
+      protocol: http
+    - name: https
+      port: 5002
+      protocol: https
+- name: ingredients
+  project: src/Ingredients/Ingredients.csproj
