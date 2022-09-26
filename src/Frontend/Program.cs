@@ -7,11 +7,18 @@ var macOs = OperatingSystem.IsMacOS();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var ingredientsUri = macOs ? "http://localhost:5002" : "https://localhost:5003";
+var defaultIngredientsUri = macOs ? "http://localhost:5002" : "https://localhost:5003";
+
+var binding = macOs ? "http" : "https";
+
+var ingredientsUri = builder.Configuration.GetServiceUri("ingredients", binding)
+                     ?? new Uri(defaultIngredientsUri);
+
+
 
 builder.Services.AddGrpcClient<IngredientsService.IngredientsServiceClient>(o =>
 {
-    o.Address = new Uri(ingredientsUri);
+    o.Address = ingredientsUri;
 });
 
 var app = builder.Build();
