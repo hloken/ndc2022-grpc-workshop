@@ -14,11 +14,12 @@ public class ToppingsTests: IClassFixture<IngredientsApplicationFactory>
     }
 
     [Fact]
-    public async Task Test1()
+    public async Task GetsToppings()
     {
         var client = _factory.CreateGrpcClient();
         var response = await client.GetToppingsAsync((new GetToppingsRequest()));
         
-        Assert.NotEmpty(response.Toppings);
+        Assert.Collection(response.Toppings, t => 
+            Assert.Equal("cheese", t.Id), t => Assert.Equal("tomato", t.Id));
     }
 }
