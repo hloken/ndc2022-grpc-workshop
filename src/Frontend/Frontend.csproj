@@ -22,4 +22,8 @@
     <Protobuf Include="Protos\decimal.proto" GrpcServices="None" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AuthHelp\AuthHelp.csproj" />
+  </ItemGroup>
+
 </Project>

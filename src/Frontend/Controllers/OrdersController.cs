@@ -31,6 +31,16 @@ public class OrdersController : Controller
             CrustId = viewModel.SelectedCrust
         };
 
+        var metadata = new Metadata();
+        if (User.Identity.IsAuthenticated)
+        {
+            var authHeader = Request.Headers.Authorization[0];
+            if (authHeader.StartsWith("Bearer "))
+            {
+                metadata.Add("Authorization", authHeader);
+            }
+        }
+        
         try
         {
             var response = await _orderServiceClient.PlaceOrderAsync(placeOrderRequest);

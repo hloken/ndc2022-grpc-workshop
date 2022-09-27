@@ -1,3 +1,5 @@
+using AuthHelp;
+using Grpc.Core;
 using Ingredients.Protos;
 using Orders.Protos;
 
@@ -26,7 +28,17 @@ var ordersUri = builder.Configuration.GetServiceUri("orders", binding)
 builder.Services.AddGrpcClient<OrderService.OrderServiceClient>(o =>
 {
     o.Address = ordersUri;
-});
+})
+    .ConfigureChannel(channel =>
+    {
+        var callCredentials = CallCredentials.FromInterceptor(async (_, metadata) =>
+        {
+            var token = JwtHelper.GenerateJwtToken("frontend");
+            metadata.Add("Authorization", $"Bearer {token}");
+        });
+                
+        channel.Credentials = ChannelCredentials.Create(ChannelCredentials.SecureSsl, callCredentials);
+    });
 
 var app = builder.Build();
 

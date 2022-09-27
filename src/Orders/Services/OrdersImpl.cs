@@ -1,11 +1,13 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Ingredients.Protos;
+using Microsoft.AspNetCore.Authorization;
 using Orders.Proto;
 using Orders.PubSub;
 
 namespace Orders.Services;
 
+[Authorize]
 public class OrdersImpl: OrderService.OrderServiceBase
 {
     private readonly IngredientsService.IngredientsServiceClient _ingredientsServiceClient;
@@ -19,6 +21,7 @@ public class OrdersImpl: OrderService.OrderServiceBase
         _orderMessages = orderMessages;
     }
 
+    [Authorize]
     public override async Task<PlaceOrderResponse> PlaceOrder(PlaceOrderRequest request, ServerCallContext context)
     {
         if (request.CrustId.Length == 0)
@@ -54,6 +57,7 @@ public class OrdersImpl: OrderService.OrderServiceBase
         };
     }
 
+    [AllowAnonymous]
     public override async Task Subscribe(SubscriberRequest request, IServerStreamWriter<OrderNotification> responseStream, ServerCallContext context)
     {
         var cancellationToken = context.CancellationToken;
