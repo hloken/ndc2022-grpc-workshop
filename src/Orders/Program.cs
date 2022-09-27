@@ -1,19 +1,25 @@
 using Ingredients.Protos;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Orders.PubSub;
 using Orders.Services;
 
+var runningInContainer = "true".Equals(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"));
+var macOs = OperatingSystem.IsMacOS();
+
 var builder = WebApplication.CreateBuilder(args);
+
+if (runningInContainer)
+{
+    builder.WebHost.ConfigureKestrel(k =>
+    {
+        k.ConfigureEndpointDefaults(o => o.Protocols = HttpProtocols.Http2);
+    });
+}
 
 // Additional configuration is required to successfully run gRPC on macOS.
 // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
 
-var macOs = OperatingSystem.IsMacOS();
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
 var defaultIngredientsUri = macOs ? "http://localhost:5002" : "https://localhost:5003";
-
 var binding = macOs ? "http" : "https";
 
 var ingredientsUri = builder.Configuration.GetServiceUri("ingredients", binding)

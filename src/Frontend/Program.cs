@@ -3,12 +3,13 @@ using Orders.Protos;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var runningInContainer = "true".Equals(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"));
 var macOs = OperatingSystem.IsMacOS();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var binding = macOs ? "http" : "https";
+var binding = macOs | runningInContainer ? "http" : "https";
 
 var defaultIngredientsUri = macOs ? "http://localhost:5002" : "https://localhost:5003";
 var ingredientsUri = builder.Configuration.GetServiceUri("ingredients", binding)
