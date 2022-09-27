@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-Shop-b963adbb-745a-4931-90f2-b17886d41dbc</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.21.6" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.49.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.49.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\orders.proto" GrpcServices="Client"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Orders\Orders.csproj" />
+  </ItemGroup>
+</Project>

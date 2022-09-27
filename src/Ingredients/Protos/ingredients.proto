@@ -9,7 +9,9 @@ package ingredients;
 service IngredientsService
 {
   rpc GetToppings(GetToppingsRequest) returns (GetToppingsResponse);
+  rpc DecrementToppings(DecrementToppingsRequest) returns (DecrementToppingsResponse);
   rpc GetCrusts(GetCrustsRequest) returns (GetCrustsResponse);
+  rpc DecrementCrusts(DecrementCrustsRequest) returns (DecrementCrustsResponse);
 }
 
 message GetToppingsRequest {}
@@ -38,3 +40,16 @@ message Crust {
   customTypes.DecimalValue price = 4;
   int32 stockCount = 5;
 }
+
+message DecrementToppingsRequest {
+  repeated string topping_ids = 1;  
+}
+
+message DecrementToppingsResponse {};
+
+message DecrementCrustsRequest {
+  repeated string crust_ids = 1;
+
+}
+
+message DecrementCrustsResponse {};

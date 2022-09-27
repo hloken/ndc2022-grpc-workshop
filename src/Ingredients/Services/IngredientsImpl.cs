@@ -59,4 +59,24 @@ public class IngredientsImpl : IngredientsService.IngredientsServiceBase
 
         return response;
     }
+
+    public override async Task<DecrementToppingsResponse> DecrementToppings(DecrementToppingsRequest request,
+        ServerCallContext context)
+    {
+        var tasks = request.ToppingIds
+            .Select(id => _toppingData.DecrementStockAsync(id, context.CancellationToken));
+
+        await Task.WhenAll(tasks);
+        return new DecrementToppingsResponse();
+    }
+    
+    public override async Task<DecrementCrustsResponse> DecrementCrusts(DecrementCrustsRequest request,
+        ServerCallContext context)
+    {
+        var tasks = request.CrustIds
+            .Select(id => _toppingData.DecrementStockAsync(id, context.CancellationToken));
+
+        await Task.WhenAll(tasks);
+        return new DecrementCrustsResponse();
+    }
 }

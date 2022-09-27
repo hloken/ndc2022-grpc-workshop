@@ -1,0 +1,19 @@
+﻿syntax= "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Orders.Proto";
+
+package orders;
+
+service OrderService {
+  rpc Subscribe(SubscriberRequest) returns (stream OrderNotification);
+}
+
+message SubscriberRequest {}
+
+message OrderNotification {
+  string crust_id = 1;
+  repeated string toppings_id = 2;
+  google.protobuf.Timestamp due_by = 3;
+}

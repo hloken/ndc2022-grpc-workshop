@@ -7,13 +7,13 @@ namespace Frontend.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IngredientsService.IngredientsServiceClient _ingredientsServiceClient;
+    private readonly IngredientsService.IngredientsServiceClient _ingredients;
     private readonly ILogger<HomeController> _logger;
     
-    public HomeController(ILogger<HomeController> logger, IngredientsService.IngredientsServiceClient ingredientsServiceClient)
+    public HomeController(ILogger<HomeController> logger, IngredientsService.IngredientsServiceClient ingredients)
     {
         _logger = logger;
-        this._ingredientsServiceClient = ingredientsServiceClient;
+        _ingredients = ingredients;
     }
 
     public async Task<IActionResult> Index()
@@ -27,7 +27,7 @@ public class HomeController : Controller
 
     private async Task<List<ToppingViewModel>> GetToppingsAsync()
     {
-        var response = await _ingredientsServiceClient.GetToppingsAsync(new GetToppingsRequest());
+        var response = await _ingredients.GetToppingsAsync(new GetToppingsRequest());
 
         return response.Toppings
             .Select(t => new ToppingViewModel(t.Id, t.Name, t.Price))
@@ -36,10 +36,12 @@ public class HomeController : Controller
     
     private async Task<List<CrustViewModel>> GetCrustsAsync()
     {
-        var response = await _ingredientsServiceClient.GetCrustsAsync(new GetCrustsRequest());
+        var response = await _ingredients.GetCrustsAsync(new GetCrustsRequest());
 
         return response.Crusts
             .Select(t => new CrustViewModel(t.Id, t.Name, t.Size, t.Price))
+            .OrderBy(t => t.Size)
+            .ThenBy(t => t.Id)
             .ToList();
     }
     

@@ -1,4 +1,5 @@
 using Ingredients.Protos;
+using Orders.Protos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,18 +8,24 @@ var macOs = OperatingSystem.IsMacOS();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var defaultIngredientsUri = macOs ? "http://localhost:5002" : "https://localhost:5003";
-
 var binding = macOs ? "http" : "https";
 
+var defaultIngredientsUri = macOs ? "http://localhost:5002" : "https://localhost:5003";
 var ingredientsUri = builder.Configuration.GetServiceUri("ingredients", binding)
                      ?? new Uri(defaultIngredientsUri);
-
-
 
 builder.Services.AddGrpcClient<IngredientsService.IngredientsServiceClient>(o =>
 {
     o.Address = ingredientsUri;
+});
+
+var defaultOrdersUri = macOs ? "http://localhost:5004" : "https://localhost:5005";
+var ordersUri = builder.Configuration.GetServiceUri("orders", binding)
+                     ?? new Uri(defaultOrdersUri);
+
+builder.Services.AddGrpcClient<OrderService.OrderServiceClient>(o =>
+{
+    o.Address = ordersUri;
 });
 
 var app = builder.Build();
