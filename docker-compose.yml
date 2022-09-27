@@ -1,0 +1,22 @@
+version: '3'
+
+
+services:
+
+  frontend:
+    image: local/frontend
+    build:
+      context: .
+      dockerfile: Frontend.dockerfile
+
+  ingredients:
+    image: local/ingredients
+    build:
+      context: .
+      dockerfile: Ingredients.dockerfile
+  
+  orders:
+    image: local/orders
+    build:
+      context: .
+      dockerfile: Orders.dockerfile
