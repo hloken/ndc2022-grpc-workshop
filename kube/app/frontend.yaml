@@ -49,4 +49,4 @@ spec:
   type: NodePort
   ports:
   - port: 80
-    targetPort: 30001
+    nodePort: 30001
